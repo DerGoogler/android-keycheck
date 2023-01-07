@@ -1,7 +1,7 @@
-const ButtonEvent = require("../index.js");
+const { Keycheck } = require("../index.js");
 const fs = require("fs");
 
-const mybutton = new ButtonEvent();
+const mybutton = new Keycheck();
 
 while (1) {
   const state = mybutton.check();
@@ -9,7 +9,7 @@ while (1) {
   const toggle = fs.readFileSync("/sys/class/leds/led:switch_0/brightness", "utf8");
   if (state.value() != 0) {
     switch (state.code()) {
-      case ButtonEvent.KEY_VOLUMEUP:
+      case Keycheck.KEY_VOLUMEUP:
         switch (toggle.trim()) {
           case "0":
             fs.writeFileSync("/sys/class/leds/led:torch_0/brightness", String(brightness));

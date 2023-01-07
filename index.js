@@ -315,10 +315,18 @@ class Keycheck {
   check() {
     const event = addon.__native_keycheck();
     return {
-      code: () => event.code,
-      value: () => event.value,
+      code: event.code,
+      value: event.value,
     };
   }
 }
 
-module.exports = Keycheck;
+function keycheck() {
+  const __keycheck = addon.__native_keycheck();
+
+  if (__keycheck.value != 0) {
+    return __keycheck.code;
+  }
+}
+
+module.exports = { Keycheck, keycheck };
