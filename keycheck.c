@@ -247,6 +247,12 @@ static napi_value Keycheck(napi_env env, napi_callback_info info)
 		return code;
 	}
 
+
+  	napi_value size;
+  	status = napi_create_object(env, &size);
+  	assert(status == napi_ok);
+  	napi_value valueTransfer;
+
 	while (1)
 	{
 		poll(ufds, nfds, -1);
@@ -267,12 +273,26 @@ static napi_value Keycheck(napi_env env, napi_callback_info info)
 	      			return code;
 				}
 
+				/*
 				if (event.value != 0)
 				{
 					status = napi_create_double(env, event.code, &code);
-  				assert(status == napi_ok);
+  					assert(status == napi_ok);
 					return code;
 				}
+				*/
+
+				status = napi_create_double(env, event.value, &valueTransfer);
+  				assert(status == napi_ok);
+  				status = napi_set_named_property(env, size, "value", valueTransfer);
+  				assert(status == napi_ok);
+
+  				status = napi_create_double(env, event.code, &valueTransfer);
+  				assert(status == napi_ok);
+  				status = napi_set_named_property(env, size, "code", valueTransfer);
+  				assert(status == napi_ok);
+
+				return size;
 
 				if (event_count && --event_count == 0)
 				{
